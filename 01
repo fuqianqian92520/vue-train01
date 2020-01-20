@@ -1,0 +1,24 @@
+v-if和v-for哪个优先级高？如果两个同时出现，应该怎么优化得到更好的性能？
+
+首先官网提示v-if和v-for不推荐同时使用
+当它们处于同一节点， v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中。
+第一种：将 v-if 和 v-for 分别放在不同标签中
+<ul v-if="active">
+	<li v-for="item in list" :key="item.id">
+		{{ item.title }}
+	</li>
+</ul>
+第二种：如果 v-if 和 v-for 只能放在同一级标签中，使用计算属性进行改造：
+// 计算属性
+computed: {
+	calculateList() {
+		return (params1, params2) => {
+			return params1.filter(item => item.navigationbarId == JSON.parse(params2).navigationbarId);
+		}
+	}
+}
+// html 中 v-for
+ v-for="(row, i) in calculateList(scope.row.navDish, item)" :key="i"
+————————————————
+版权声明：本文为CSDN博主「随遇而安、1314」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/LonewoIf/article/details/86686918
